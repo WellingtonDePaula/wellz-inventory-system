@@ -1,6 +1,3 @@
 ﻿<Solution>
-  <Project Path="Wellz00.Wellzinventorysystem.csproj" />
-  <Project Path="Wellz00.Wellzinventorysystem.Tests.csproj" />
-  <Project Path="Wellz00.Wellzinventorysystem.Editor.Tests.csproj" />
-  <Project Path="Wellz00.Wellzinventorysystem.Editor.csproj" />
+  <Project Path="Wellz.Inventory.Runtime.csproj" />
 </Solution>
