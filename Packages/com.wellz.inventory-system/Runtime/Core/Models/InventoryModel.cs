@@ -6,7 +6,7 @@ using Wellz.Inventory.Items;
 using Wellz.Utils.Core;
 
 namespace Wellz.Inventory.Core.Models {
-    public class InventoryModel : IInventoryModel {
+    public class InventoryModel {
         // Campos estáticos e constantes
 
         // Campos privados para o estado interno da classe

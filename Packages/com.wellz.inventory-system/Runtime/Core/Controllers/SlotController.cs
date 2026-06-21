@@ -21,19 +21,26 @@ namespace Wellz.Inventory.Core.Controllers {
 
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
+
         #endregion
 
         #region Métodos públicos e privados da lógica da classe
         public int AddItem(ItemData item, int quantity = 1) {
-            return model.AddItem(item, quantity);
+            int remainder = model.AddItem(item, quantity);
+            view.RefreshView(model.Quantity);
+            return remainder;
         }
 
         public int RemoveItem(ItemData item, int quantity = 1) {
-            return model.RemoveItem(item, quantity);
+            int remainder = model.RemoveItem(item, quantity);
+            view.RefreshView(model.Quantity);
+            return remainder;
         }
 
         public bool SwapItem(ItemData item) {
-            return model.SwapItem(item);
+            bool swapped = model.SwapItem(item);
+            view.SwapItem(item, model.Quantity);
+            return swapped;
         }
 
         public bool SwapSlot(ISlotController slot) {
@@ -56,6 +63,7 @@ namespace Wellz.Inventory.Core.Controllers {
         public void Setup(Vector2Int gridPos, ItemData item = null, int quantity = 0) {
             this.gridPos = gridPos;
             model = new SlotModel(item, quantity);
+            view.SetupView(item, quantity);
         }
         #endregion
 
