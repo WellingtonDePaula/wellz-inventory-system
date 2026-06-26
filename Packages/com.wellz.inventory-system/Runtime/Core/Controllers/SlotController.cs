@@ -1,7 +1,7 @@
 using UnityEngine;
 using Wellz.Inventory.Core.Interfaces;
 using Wellz.Inventory.Core.Models;
-using Wellz.Inventory.Core.Views;
+using Wellz.Inventory.Input;
 using Wellz.Inventory.Items;
 
 namespace Wellz.Inventory.Core.Controllers {
@@ -11,7 +11,7 @@ namespace Wellz.Inventory.Core.Controllers {
         // Campos expostos no Inspector
 
         // TEMPORÁRIO ATÉ A CRIAÇÃO DO INVENTORY CONTROLLER
-        [SerializeField] private IInputProvider inputProvider;
+        [SerializeField] private InputProvider inputProvider;
         //-----------------------------------------------//
 
         // Propriedades para acesso controlado externo
@@ -30,18 +30,22 @@ namespace Wellz.Inventory.Core.Controllers {
             view = GetComponent<ISlotView>();
         }
 
+        private void Update() {
+            view.HoverEnter(inputProvider);
+        }
+
+        private void OnDestroy() {
+            // Lembre-se de remover a assinatura para evitar memory leaks
+            if (model != null)
+                model.OnQuantityChanged -= HandleModelChanged;
+        }
+
         #endregion
 
         #region Métodos públicos e privados da lógica da classe
-        public int AddItem(ItemData item, int quantity = 1) {
-            int remainder = model.AddItem(item, quantity);
-            view.RefreshView(model.Item, model.Quantity);
-            return remainder;
-        }
 
         public int RemoveItem(ItemData item, int quantity = 1) {
             int remainder = model.RemoveItem(item, quantity);
-            view.RefreshView(model.Item, model.Quantity);
             return remainder;
         }
 
@@ -71,7 +75,21 @@ namespace Wellz.Inventory.Core.Controllers {
         public void Setup(Vector2Int gridPos, ItemData item = null, int quantity = 0) {
             this.gridPos = gridPos;
             model = new SlotModel(item, quantity);
+
+            // O Controller assina o evento do Model
+            model.OnQuantityChanged += HandleModelChanged;
+
             view.SetupView(model.Item, model.Quantity);
+        }
+
+        private void HandleModelChanged() {
+            // Sempre que o model mudar por QUALQUER motivo, a view se atualiza
+            view.RefreshView(model.Item, model.Quantity);
+        }
+
+        public int AddItem(ItemData item, int quantity = 1) {
+            // O controller só altera o model. A chamada de RefreshView agora é automática pelo evento.
+            return model.AddItem(item, quantity);
         }
         #endregion
 

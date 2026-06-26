@@ -16,8 +16,13 @@ namespace Wellz.Inventory.Core.Views {
 
         // Campos privados para o estado interno da classe
         private ItemData itemData;
+        private RectTransform rectTransform;
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
+
+        private void Start() {
+            rectTransform = backgroundImage.rectTransform;
+        }
 
         #endregion
 
@@ -52,8 +57,10 @@ namespace Wellz.Inventory.Core.Views {
             quantityText.text = quantity.ToString();
         }
 
-        public void HoverEnter() {
-            throw new System.NotImplementedException();
+        public void HoverEnter(IInputProvider input) {
+            if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, input.Position())) {
+                Debug.Log($"Hoverado: {itemData.name}");
+            }
         }
 
         public void HoverExit() {
