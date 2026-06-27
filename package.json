@@ -1,0 +1,19 @@
+{
+  "name": "com.wellz.inventory-system",
+  "displayName": "Wellz Inventory System",
+  "version": "0.1.0",
+  "unity": "6000.0",
+  "unityRelease": "0f1",
+  "description": "A modular inventory system for Unity 6 projects developed by Wellz.",
+  "dependencies": {
+    "com.wellz.utils": "0.1.0"
+  },
+  "author": {
+    "name": "Wellington Zeitz de Paula",
+    "url": "https://github.com/WellingtonDePaula",
+    "email": "owellingtondepaula@gmail.com"
+  },
+  "changelogUrl": "https://github.com/WellingtonDePaula/wellz-inventory-system",
+  "documentationUrl": "https://github.com/WellingtonDePaula/wellz-inventory-system",
+  "licensesUrl": "https://github.com/WellingtonDePaula/wellz-inventory-system"
+}
