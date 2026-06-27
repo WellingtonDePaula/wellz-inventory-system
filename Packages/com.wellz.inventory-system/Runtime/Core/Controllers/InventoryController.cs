@@ -1,3 +1,5 @@
+using Mono.Cecil.Cil;
+using System.Collections.Generic;
 using UnityEngine;
 using Wellz.Inventory.Core.Interfaces;
 using Wellz.Inventory.Core.Models;
@@ -21,6 +23,8 @@ namespace Wellz.Inventory.Core.Controllers {
         // Propriedades para acesso controlado externo
 
         // Campos privados para o estado interno da classe
+        private SlotController currentHoverSlot = null;
+        private SlotController currentSelectedSlot = null;
         private GenericGrid<SlotController> inventoryGrid;
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
@@ -53,14 +57,39 @@ namespace Wellz.Inventory.Core.Controllers {
 
         #region Métodos públicos e privados da lógica da classe
         private void HandleOnPressed() {
+            if (currentHoverSlot == null) { return; }
 
+            if (currentSelectedSlot != currentHoverSlot && currentSelectedSlot != null) {
+                currentSelectedSlot.SelectSlot();
+                currentSelectedSlot = null;
+            }
+
+            currentHoverSlot.SelectSlot();
+            currentSelectedSlot = currentHoverSlot;
         }
         private void HandleOnReleased() {
 
         }
         private void HandleOnPositionChanged(Vector2 pos) {
+            SlotController slotUnder = null;
+            inventoryGrid.ForEach((x, y, slot) => {
+                if (RectTransformUtility.RectangleContainsScreenPoint(slot.RectTransform, pos)) {
+                    slotUnder = slot;
+                }
+            });
 
+            if (slotUnder != currentHoverSlot) {
+                if (currentHoverSlot != null) {
+                    currentHoverSlot.HoverSlot(false);
+                }
+
+                currentHoverSlot = slotUnder;
+
+                if (currentHoverSlot != null) {
+                    currentHoverSlot.HoverSlot(true);
+                }
+            }
         }
-        #endregion
     }
+        #endregion
 }

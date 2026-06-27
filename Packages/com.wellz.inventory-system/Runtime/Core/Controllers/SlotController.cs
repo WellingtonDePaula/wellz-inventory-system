@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Wellz.Inventory.Core.Interfaces;
 using Wellz.Inventory.Core.Models;
@@ -5,19 +6,25 @@ using Wellz.Inventory.Input;
 using Wellz.Inventory.Items;
 
 namespace Wellz.Inventory.Core.Controllers {
+    [RequireComponent(typeof(ISlotView))]
     public class SlotController : MonoBehaviour, ISlotController {
         // Campos estáticos e constantes
 
         // Campos expostos no Inspector
+        [SerializeField] private RectTransform rectTransform; 
 
         // Propriedades para acesso controlado externo
         public Vector2Int GridPos { get => gridPos; set => gridPos = value; }
+        public RectTransform RectTransform => rectTransform;
 
         // Campos privados para o estado interno da classe
         private Vector2Int gridPos;
 
         private SlotModel model;
         private ISlotView view;
+
+        private bool hover = false;
+        private bool selected = false;
 
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
@@ -70,6 +77,23 @@ namespace Wellz.Inventory.Core.Controllers {
             model.OnQuantityChanged += HandleModelChanged;
 
             view.SetupView(model.Item, model.Quantity);
+        }
+
+        public void HoverSlot(bool isHover) {
+            hover = isHover;
+            if (isHover) {
+                view.HoverEnter();
+                return;
+            }
+            view.HoverExit();
+        }
+        public void SelectSlot() {
+            selected = !selected;
+            if (selected) {
+                view.Select();
+                return;
+            }
+            view.Deselect();
         }
 
         public int AddItem(ItemData item, int quantity = 1) {

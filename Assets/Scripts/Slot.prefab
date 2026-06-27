@@ -223,7 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a814e8541f016dd43b0c349b8deb45a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Wellz.Inventory.Runtime::Wellz.Inventory.Core.Controllers.SlotController
-  inputProvider: {fileID: 11400000, guid: 1fe182adcb4bf5a4a9b35a72abb02c4f, type: 2}
+  rectTransform: {fileID: 7401214996789768974}
 --- !u!114 &1535581414048194826
 MonoBehaviour:
   m_ObjectHideFlags: 0
