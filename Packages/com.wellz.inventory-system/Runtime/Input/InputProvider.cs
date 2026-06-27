@@ -1,24 +1,23 @@
+using System;
 using UnityEngine;
 using Wellz.Inventory.Core.Interfaces;
+
 namespace Wellz.Inventory.Input {
     public abstract class InputProvider : ScriptableObject, IInputProvider {
-        // Campos estáticos e constantes
 
-        // Campos expostos no Inspector
+        public event Action<Vector2> OnPositionChanged;
+        public event Action OnPressed;
+        public event Action OnReleased;
 
-        // Propriedades para acesso controlado externo
+        protected void InvokePositionChanged(Vector2 pos) => OnPositionChanged?.Invoke(pos);
+        protected void InvokePressed() => OnPressed?.Invoke();
+        protected void InvokeReleased() => OnReleased?.Invoke();
 
-        // Campos privados para o estado interno da classe
-
-        #region Métodos do ciclo de vida do ScriptableObject (OnEnable, OnDisable, OnDestroy)
-        #endregion
-
-        #region Métodos públicos e privados da lógica da classe
         public abstract Vector2 Position();
-
         public abstract bool Pressed();
-
         public abstract bool Released();
-        #endregion
+
+        public virtual void Activate() { }
+        public virtual void Deactivate() { }
     }
 }

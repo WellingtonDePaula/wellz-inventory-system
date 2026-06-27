@@ -2,7 +2,7 @@
 
 namespace Wellz.Inventory.Core.Interfaces {
     public interface IInteractable {
-        void HoverEnter(IInputProvider input);
+        void HoverEnter();
         void HoverExit();
         void Select();
         void Deselect();

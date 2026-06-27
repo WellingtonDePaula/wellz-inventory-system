@@ -57,10 +57,8 @@ namespace Wellz.Inventory.Core.Views {
             quantityText.text = quantity.ToString();
         }
 
-        public void HoverEnter(IInputProvider input) {
-            if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, input.Position())) {
-                Debug.Log($"Hoverado: {itemData.name}");
-            }
+        public void HoverEnter() {
+
         }
 
         public void HoverExit() {

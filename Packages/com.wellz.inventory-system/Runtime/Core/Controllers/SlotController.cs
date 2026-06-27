@@ -10,10 +10,6 @@ namespace Wellz.Inventory.Core.Controllers {
 
         // Campos expostos no Inspector
 
-        // TEMPORÁRIO ATÉ A CRIAÇÃO DO INVENTORY CONTROLLER
-        [SerializeField] private InputProvider inputProvider;
-        //-----------------------------------------------//
-
         // Propriedades para acesso controlado externo
         public Vector2Int GridPos { get => gridPos; set => gridPos = value; }
 
@@ -30,12 +26,7 @@ namespace Wellz.Inventory.Core.Controllers {
             view = GetComponent<ISlotView>();
         }
 
-        private void Update() {
-            view.HoverEnter(inputProvider);
-        }
-
         private void OnDestroy() {
-            // Lembre-se de remover a assinatura para evitar memory leaks
             if (model != null)
                 model.OnQuantityChanged -= HandleModelChanged;
         }
@@ -76,20 +67,17 @@ namespace Wellz.Inventory.Core.Controllers {
             this.gridPos = gridPos;
             model = new SlotModel(item, quantity);
 
-            // O Controller assina o evento do Model
             model.OnQuantityChanged += HandleModelChanged;
 
             view.SetupView(model.Item, model.Quantity);
         }
 
-        private void HandleModelChanged() {
-            // Sempre que o model mudar por QUALQUER motivo, a view se atualiza
-            view.RefreshView(model.Item, model.Quantity);
+        public int AddItem(ItemData item, int quantity = 1) {
+            return model.AddItem(item, quantity);
         }
 
-        public int AddItem(ItemData item, int quantity = 1) {
-            // O controller só altera o model. A chamada de RefreshView agora é automática pelo evento.
-            return model.AddItem(item, quantity);
+        private void HandleModelChanged() {
+            view.RefreshView(model.Item, model.Quantity);
         }
         #endregion
 
