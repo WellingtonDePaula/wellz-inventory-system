@@ -27,6 +27,14 @@ namespace Wellz.Inventory.Core.Controllers {
         protected GenericGrid<SlotControllerBase> inventoryGrid;
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
+        protected virtual void Awake() {
+            inventoryGrid = new GenericGrid<SlotControllerBase>(width, height, 1, default, (grid, x, y) => {
+                var slot = Instantiate(slotPrefab, slotsTransform).GetComponent<SlotControllerBase>();
+                slot.CreateSlot(new Vector2Int(x, y));
+                return slot;
+            });
+            InitializeItems();
+        }
 
         protected virtual void OnEnable() {
             if (inputProvider != null) {
@@ -68,7 +76,13 @@ namespace Wellz.Inventory.Core.Controllers {
             List<SlotControllerBase> allSlots = inventoryGrid.GetAllValues().ToList();
             for (int i = 0; i < allSlots.Count(); i++) {
                 var slot = allSlots[i];
-                slot.Setup(initialItems[i].Item, initialItems[i].Quantity);
+
+                if (i <= initialItems.Count() - 1) {
+                    slot.Setup(initialItems[i].Item, initialItems[i].Quantity);
+                    continue;
+                }
+
+                slot.Setup(null, 0);
             }
         }
         #endregion
