@@ -60,11 +60,11 @@ namespace Wellz.Inventory.Core.Controllers {
             if (currentHoverSlot == null) { return; }
 
             if (currentSelectedSlot != currentHoverSlot && currentSelectedSlot != null) {
-                currentSelectedSlot.SelectSlot();
+                currentSelectedSlot.SelectSlot(true);
                 currentSelectedSlot = null;
             }
 
-            currentHoverSlot.SelectSlot();
+            currentHoverSlot.SelectSlot(false);
             currentSelectedSlot = currentHoverSlot;
         }
         private void HandleOnReleased() {

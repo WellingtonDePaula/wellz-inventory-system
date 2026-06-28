@@ -10,5 +10,7 @@ namespace Wellz.Inventory.Core.Interfaces {
         int AddItem(ItemData item, int quantity = 1);
         int RemoveItem(ItemData item, int quantity = 1);
         void Setup(Vector2Int gridPos, ItemData item = null, int quantity = 0);
+        void HoverSlot(bool hover);
+        void SelectSlot(bool select);
     }
 }
