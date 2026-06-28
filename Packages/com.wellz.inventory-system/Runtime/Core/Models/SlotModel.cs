@@ -33,8 +33,6 @@ namespace Wellz.Inventory.Core.Models {
         }
 
         #region Métodos públicos e privados da lógica da classe
-        #endregion
-
         public bool SetItem(ItemData item) {
             if (this.item != null) { return false; }
 
@@ -91,7 +89,7 @@ namespace Wellz.Inventory.Core.Models {
                 this.quantity = 0;
                 OnQuantityChanged?.Invoke();
 
-                if(!this.item.IsStackable) { return 1; }
+                if (!this.item.IsStackable) { return 1; }
 
                 return removedAmount;
             }
@@ -106,5 +104,6 @@ namespace Wellz.Inventory.Core.Models {
                 item = null;
             }
         }
+        #endregion
     }
 }

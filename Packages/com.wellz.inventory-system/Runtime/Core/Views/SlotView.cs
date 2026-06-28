@@ -29,7 +29,12 @@ namespace Wellz.Inventory.Core.Views {
 
         #region Métodos públicos e privados da lógica da classe
         public void Clear() {
-            throw new System.NotImplementedException();
+            itemData = null;
+            iconImage.sprite = null;
+            quantityText.text = "";
+
+            rectTransform.localScale = new Vector3(1, 1);
+            rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
         public void RefreshView(ItemData data, int quantity) {
@@ -48,9 +53,7 @@ namespace Wellz.Inventory.Core.Views {
 
         public void SetupView(ItemData data, int quantity) {
             if (data == null) {
-                itemData = null;
-                iconImage.sprite = null;
-                quantityText.text = "";
+                Clear();
                 return;
             }
             itemData = data;
