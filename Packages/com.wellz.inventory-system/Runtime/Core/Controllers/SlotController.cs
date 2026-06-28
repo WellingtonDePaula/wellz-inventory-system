@@ -23,9 +23,6 @@ namespace Wellz.Inventory.Core.Controllers {
         private SlotModel model;
         private ISlotView view;
 
-        private bool hover = false;
-        private bool selected = false;
-
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
 
@@ -34,8 +31,9 @@ namespace Wellz.Inventory.Core.Controllers {
         }
 
         private void OnDestroy() {
-            if (model != null)
+            if (model != null) {
                 model.OnQuantityChanged -= HandleModelChanged;
+            }
         }
 
         #endregion
@@ -80,7 +78,6 @@ namespace Wellz.Inventory.Core.Controllers {
         }
 
         public void HoverSlot(bool isHover) {
-            hover = isHover;
             if (isHover) {
                 view.HoverEnter();
                 return;
@@ -88,12 +85,6 @@ namespace Wellz.Inventory.Core.Controllers {
             view.HoverExit();
         }
         public void SelectSlot() {
-            selected = !selected;
-            if (selected) {
-                view.Select();
-                return;
-            }
-            view.Deselect();
         }
 
         public int AddItem(ItemData item, int quantity = 1) {

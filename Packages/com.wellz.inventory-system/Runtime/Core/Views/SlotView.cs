@@ -18,8 +18,6 @@ namespace Wellz.Inventory.Core.Views {
         // Campos privados para o estado interno da classe
         private ItemData itemData;
         private RectTransform rectTransform;
-        private bool selected = false;
-        private bool hover = false;
 
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
 
@@ -61,34 +59,23 @@ namespace Wellz.Inventory.Core.Views {
         }
 
         public void HoverEnter() {
-            hover = true;
-            if (selected) { return; }
             backgroundImage.color = UtilsClass.GetRandomColor();
             rectTransform.localScale = new Vector3(1.1f, 1.1f);
         }
 
         public void HoverExit() {
-            hover = false;
-            if (selected) { return; }
             backgroundImage.color = Color.white;
             rectTransform.localScale = new Vector3(1, 1);
         }
 
         public void Select() {
-            selected = true;
             backgroundImage.color = UtilsClass.GetRandomColor();
             rectTransform.localScale = new Vector3(1.1f, 1.1f);
         }
 
         public void Deselect() {
-            selected = false;
             backgroundImage.color = Color.white;
             rectTransform.localScale = new Vector3(1, 1);
-
-            if (hover) {
-                backgroundImage.color = UtilsClass.GetRandomColor();
-                rectTransform.localScale = new Vector3(1.1f, 1.1f);
-            }
         }
         #endregion
     }
