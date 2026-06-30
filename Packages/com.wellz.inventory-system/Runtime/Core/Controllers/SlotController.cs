@@ -26,13 +26,7 @@ namespace Wellz.Inventory.Core.Controllers {
                 return quantity;
             }
 
-            int remainder = model.RemoveItem(item, quantity);
-
-            if (model.IsEmpty) {
-                InvokeOnItemEnded(this);
-            }
-
-            return remainder;
+            return model.RemoveItem(item, quantity);
         }
 
         public override int AddItem(ItemData item, int quantity = 1) {
@@ -82,9 +76,16 @@ namespace Wellz.Inventory.Core.Controllers {
 
         protected override void HandleModelChanged(int quantity) {
             view.RefreshView(model.Item, quantity);
-            if (model.IsEmpty && isSelected) {
+
+            if (!model.IsEmpty) {
+                return;
+            }
+
+            if (isSelected) {
                 SelectSlot(false);
             }
+
+            InvokeOnItemEnded(this);
         }
 
         public override void FocusSlot(bool focus) {

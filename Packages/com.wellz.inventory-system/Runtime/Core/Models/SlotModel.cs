@@ -14,7 +14,6 @@ namespace Wellz.Inventory.Core.Models {
         // Propriedades para acesso controlado externo
         public ItemData Item => item;
         public event Action<int> OnQuantityChanged;
-        public event Action OnItemEnded;
         public bool IsEmpty => (item == null);
 
         public int Quantity => quantity;
@@ -90,7 +89,6 @@ namespace Wellz.Inventory.Core.Models {
 
             if (!item.IsPermanentSlot) {
                 item = null;
-                OnItemEnded?.Invoke();
             }
         }
         #endregion

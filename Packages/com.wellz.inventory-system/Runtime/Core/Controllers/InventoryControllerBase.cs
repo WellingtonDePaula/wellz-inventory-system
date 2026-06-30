@@ -88,7 +88,7 @@ namespace Wellz.Inventory.Core.Controllers {
         protected abstract void HandleOnPositionChanged(Vector2 pos);
 
         protected abstract void HandleOnItemEnded(SlotControllerBase slotController);
-        protected abstract bool IsSlotAvailableToSelect();
+        protected abstract bool IsSlotAvailableToSelect(SlotControllerBase slot);
         protected virtual void InitializeItems() {
             List<SlotControllerBase> allSlots = inventoryGrid.GetAllValues().ToList();
             for (int i = 0; i < allSlots.Count; i++) {

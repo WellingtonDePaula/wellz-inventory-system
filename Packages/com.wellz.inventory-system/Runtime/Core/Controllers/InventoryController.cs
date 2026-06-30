@@ -21,7 +21,7 @@ namespace Wellz.Inventory.Core.Controllers {
             if (currentHoverSlot == null) {
                 return;
             }
-            if (!IsSlotAvailableToSelect()) {
+            if (!IsSlotAvailableToSelect(currentHoverSlot)) {
                 return;
             }
 
@@ -69,8 +69,8 @@ namespace Wellz.Inventory.Core.Controllers {
             }
         }
 
-        protected override bool IsSlotAvailableToSelect() {
-            return !currentHoverSlot.IsEmpty;
+        protected override bool IsSlotAvailableToSelect(SlotControllerBase slot) {
+            return slot != null && !slot.IsEmpty;
         }
 
         private SlotControllerBase FindSlotUnderPoint(Vector2 screenPoint) {
