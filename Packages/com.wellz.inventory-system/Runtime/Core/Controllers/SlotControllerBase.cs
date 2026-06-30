@@ -2,11 +2,12 @@
 using UnityEngine;
 using Wellz.Inventory.Core.Interfaces;
 using Wellz.Inventory.Core.Models;
+using Wellz.Inventory.Core.Views;
 using Wellz.Inventory.Input;
 using Wellz.Inventory.Items;
 
 namespace Wellz.Inventory.Core.Controllers {
-    [RequireComponent(typeof(ISlotView))]
+    [RequireComponent(typeof(SlotViewBase))]
     public abstract class SlotControllerBase : MonoBehaviour, ISlotController {
         // Campos estáticos e constantes
 
@@ -16,7 +17,9 @@ namespace Wellz.Inventory.Core.Controllers {
         // Propriedades para acesso controlado externo
         public Vector2Int GridPos { get => gridPos; set => gridPos = value; }
         public RectTransform RectTransform => rectTransform;
-        public ItemData Item => model.Item;
+        public ItemData Item => model?.Item;
+        public bool IsFocused => isFocused;
+        public bool IsSelected => isSelected;
 
         // Campos privados para o estado interno da classe
         protected Vector2Int gridPos;
@@ -35,9 +38,7 @@ namespace Wellz.Inventory.Core.Controllers {
         }
 
         protected virtual void OnDestroy() {
-            if (model != null) {
-                model.OnQuantityChanged -= HandleModelChanged;
-            }
+            UnsubscribeFromModel();
         }
 
         #endregion
@@ -55,11 +56,20 @@ namespace Wellz.Inventory.Core.Controllers {
         public abstract bool SwapSlot(ISlotController slot);
 
         public abstract void Setup(ItemData item = null, int quantity = 0);
-        protected abstract void HandleModelChanged();
+        protected abstract void HandleModelChanged(int quantity);
 
         public abstract void FocusSlot(bool hover);
 
         public abstract void SelectSlot(bool select);
+
+        // Centraliza a desinscrição do evento do model. Evita assinatura duplicada
+        // quando Setup() é chamado mais de uma vez (ex.: slot reciclado em um pool)
+        // e evita repetição entre OnDestroy e Setup.
+        protected void UnsubscribeFromModel() {
+            if (model != null) {
+                model.OnQuantityChanged -= HandleModelChanged;
+            }
+        }
         #endregion
 
 

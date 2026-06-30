@@ -7,7 +7,6 @@ using Wellz.Inventory.Items;
 using Wellz.Utils.Core;
 
 namespace Wellz.Inventory.Core.Controllers {
-    [RequireComponent(typeof(ISlotView))]
     public class SlotController : SlotControllerBase {
         // Campos estáticos e constantes
 
@@ -17,21 +16,33 @@ namespace Wellz.Inventory.Core.Controllers {
 
         // Campos privados para o estado interno da classe
 
-
         #region Métodos do ciclo de vida da Unity (Awake, OnEnable, Start, OnDisable)
         #endregion
 
         #region Métodos públicos e privados da lógica da classe
 
         public override int RemoveItem(ItemData item, int quantity = 1) {
+            if (model == null || item == null || quantity <= 0) {
+                return quantity;
+            }
+
             int remainder = model.RemoveItem(item, quantity);
             return remainder;
         }
+
         public override int AddItem(ItemData item, int quantity = 1) {
+            if (model == null || item == null || quantity <= 0) {
+                return quantity;
+            }
+
             return model.AddItem(item, quantity);
         }
 
         public override bool SwapItem(ItemData item) {
+            if (model == null) {
+                return false;
+            }
+
             bool swapped = model.SetItem(item);
             view.SwapItem(item, model.Quantity);
             return swapped;
@@ -45,24 +56,31 @@ namespace Wellz.Inventory.Core.Controllers {
                 return false;
             }
 
-            Vector2Int tempPos = this.gridPos;
-
-            this.gridPos = slot.GridPos;
-
+            // aqui só é trocada a posição na grid entre os dois
+            // controllers, não os itens. Se a intenção for trocar o conteúdo
+            // (itens/quantidades) dos slots, a lógica precisa mudar.
+            Vector2Int tempPos = gridPos;
+            gridPos = slot.GridPos;
             slot.GridPos = tempPos;
 
             return true;
         }
 
         public override void Setup(ItemData item = null, int quantity = 0) {
-            model = new SlotModel(item, quantity);
+            UnsubscribeFromModel();
 
+            model = new SlotModel(item, quantity);
             model.OnQuantityChanged += HandleModelChanged;
 
             view.SetupView(model.Item, model.Quantity);
         }
-        protected override void HandleModelChanged() {
-            view.RefreshView(model.Item, model.Quantity);
+
+        protected override void HandleModelChanged(int quantity) {
+            view.RefreshView(model.Item, quantity);
+
+            if (model.IsEmpty && isSelected) {
+                SelectSlot(false);
+            }
         }
 
         public override void FocusSlot(bool hover) {

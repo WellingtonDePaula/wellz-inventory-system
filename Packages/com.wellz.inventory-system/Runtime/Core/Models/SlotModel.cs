@@ -13,7 +13,8 @@ namespace Wellz.Inventory.Core.Models {
 
         // Propriedades para acesso controlado externo
         public ItemData Item => item;
-        public event Action OnQuantityChanged;
+        public event Action<int> OnQuantityChanged;
+        public bool IsEmpty => (item == null);
 
         public int Quantity => quantity;
 
@@ -35,7 +36,7 @@ namespace Wellz.Inventory.Core.Models {
 
             OnQuantityChanged += ValidateQuantity;
 
-            OnQuantityChanged?.Invoke();
+            OnQuantityChanged?.Invoke(this.quantity);
         }
 
         #region Métodos públicos e privados da lógica da classe
@@ -59,14 +60,14 @@ namespace Wellz.Inventory.Core.Models {
                 if (addQuantity <= remainingSpace) {
                     this.quantity += addQuantity;
 
-                    OnQuantityChanged?.Invoke();
+                    OnQuantityChanged?.Invoke(this.quantity);
 
                     return 0;
                 } else {
                     this.quantity = this.item.MaxStackSize;
                     int leftover = addQuantity - remainingSpace;
 
-                    OnQuantityChanged?.Invoke();
+                    OnQuantityChanged?.Invoke(this.quantity);
 
                     return leftover;
                 }
@@ -80,10 +81,11 @@ namespace Wellz.Inventory.Core.Models {
             }
 
             int difference = this.quantity - removeQuantity;
+            bool isStackable = this.item.IsStackable;
 
             if (difference > 0) {
                 this.quantity = difference;
-                OnQuantityChanged?.Invoke();
+                OnQuantityChanged?.Invoke(this.quantity);
                 return removeQuantity;
             } else {
                 int removedAmount = this.quantity;
@@ -93,15 +95,15 @@ namespace Wellz.Inventory.Core.Models {
                 }
 
                 this.quantity = 0;
-                OnQuantityChanged?.Invoke();
+                OnQuantityChanged?.Invoke(this.quantity);
 
-                if (!this.item.IsStackable) { return 1; }
+                if (!isStackable) { return 1; }
 
                 return removedAmount;
             }
         }
 
-        private void ValidateQuantity() {
+        private void ValidateQuantity(int quantity) {
             if(item != null) {
                 if (quantity <= 0) {
                     quantity = 0;

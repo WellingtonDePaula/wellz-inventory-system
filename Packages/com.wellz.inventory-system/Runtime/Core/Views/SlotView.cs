@@ -5,7 +5,7 @@ using Wellz.Inventory.Items;
 using Wellz.Utils.Core;
 
 namespace Wellz.Inventory.Core.Views {
-    public class SlotView : MonoBehaviour, ISlotView {
+    public class SlotView : SlotViewBase {
         // Campos estáticos e constantes
 
         // Campos expostos no Inspector
@@ -28,7 +28,7 @@ namespace Wellz.Inventory.Core.Views {
         #endregion
 
         #region Métodos públicos e privados da lógica da classe
-        public void Clear() {
+        public override void Clear() {
             itemData = null;
             iconImage.sprite = null;
             quantityText.text = "";
@@ -37,7 +37,7 @@ namespace Wellz.Inventory.Core.Views {
             rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
-        public void RefreshView(ItemData data, int quantity) {
+        public override void RefreshView(ItemData data, int quantity) {
             if(itemData != data) {
                 SetupView(data, quantity);
                 return;
@@ -47,11 +47,11 @@ namespace Wellz.Inventory.Core.Views {
             quantityText.text = quantity.ToString();
         }
 
-        public void SwapItem(ItemData data, int quantity) {
+        public override void SwapItem(ItemData data, int quantity) {
             throw new System.NotImplementedException();
         }
 
-        public void SetupView(ItemData data, int quantity) {
+        public override void SetupView(ItemData data, int quantity) {
             if (data == null) {
                 Clear();
                 return;
@@ -61,23 +61,23 @@ namespace Wellz.Inventory.Core.Views {
             quantityText.text = quantity.ToString();
         }
 
-        public void FocusStarted() {
+        public override void FocusStarted() {
             backgroundImage.color = UtilsClass.GetRandomColor();
             rectTransform.localScale = new Vector3(1.1f, 1.1f);
         }
 
-        public void FocusEnded() {
+        public override void FocusEnded() {
             backgroundImage.color = Color.white;
             rectTransform.localScale = new Vector3(1, 1);
         }
 
-        public void Select() {
+        public override void Select() {
             backgroundImage.color = UtilsClass.GetRandomColor();
             rectTransform.localScale = new Vector3(0.9f, 0.9f);
             rectTransform.localRotation = Quaternion.Euler(0, 0, 45);
         }
 
-        public void Deselect() {
+        public override void Deselect() {
             backgroundImage.color = Color.white;
             rectTransform.localScale = new Vector3(1, 1);
             rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
