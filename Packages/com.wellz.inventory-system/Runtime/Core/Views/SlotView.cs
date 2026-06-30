@@ -47,10 +47,6 @@ namespace Wellz.Inventory.Core.Views {
             quantityText.text = quantity.ToString();
         }
 
-        public override void SwapItem(ItemData data, int quantity) {
-            throw new System.NotImplementedException();
-        }
-
         public override void SetupView(ItemData data, int quantity) {
             if (data == null) {
                 Clear();

@@ -28,8 +28,6 @@ namespace Wellz.Inventory.Core.Views {
 
         public abstract void RefreshView(ItemData data, int quantity);
 
-        public abstract void SwapItem(ItemData data, int quantity);
-
         public abstract void SetupView(ItemData data, int quantity);
 
         public abstract void FocusStarted();
